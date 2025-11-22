@@ -4,6 +4,8 @@
 
 ### [**Astro** 文档](https://docs.astro.build/zh-cn/getting-started/)
 
+### [项目 **Netlify** 站点](https://bitnp-net.netlify.app/)
+
 ---
 
 # Astro Starter Kit: Minimal
