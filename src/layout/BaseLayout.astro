@@ -1,6 +1,8 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+
+const title = 'BITNP-Website';
 ---
 
 <!DOCTYPE html>
@@ -8,7 +10,139 @@ import Footer from '../components/Footer.astro';
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>BITNP-Website</title>
+        <title>{title}</title>
+        <style>
+            /* 全局 CSS 变量 - 亮暗模式 */
+            :root {
+                /* 品牌颜色 */
+                --primary-color: #d97319;
+                
+                /* 亮模式颜色 */
+                --bg-color: #ffffff;
+                --text-color: #333333;
+                --header-bg: #ffffff;
+                --header-text: #333333;
+                --main-bg: #f8f9fa;
+                --main-text: #333333;
+                --footer-bg: #f1f1f1;
+                --footer-text: #666666;
+                --border-color: #eaeaea;
+                --shadow-color: rgba(0, 0, 0, 0.1);
+                --hover-color: #f5f5f5;
+            }
+            
+            /* 暗模式颜色 - 使用深蓝色背景 #001528 */
+            [data-theme="dark"] {
+                --bg-color: #001528;
+                --text-color: #e0e0e0;
+                --header-bg: #00213a;
+                --header-text: #e0e0e0;
+                --main-bg: #001528;
+                --main-text: #e0e0e0;
+                --footer-bg: #00213a;
+                --footer-text: #cccccc;
+                --border-color: #003356;
+                --shadow-color: rgba(0, 0, 0, 0.4);
+                --hover-color: #002d4d;
+            }
+            
+            /* 全局样式 */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            html, body {
+                height: 100%;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+                line-height: 1.6;
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+            
+            body {
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
+            
+            /* Header 已经有自己的样式，但需要继承全局变量 */
+            header {
+                background-color: var(--header-bg);
+                color: var(--header-text);
+            }
+            
+            main {
+                flex: 1;
+                background-color: var(--main-bg);
+                color: var(--main-text);
+                padding: 2rem;
+                margin-top: 64px; /* 为固定 header 留出空间 */
+                min-height: calc(100vh - 128px); /* 减去 header 和 footer 的高度 */
+            }
+            
+            /* Footer 样式 */
+            footer {
+                background-color: var(--footer-bg);
+                color: var(--footer-text);
+                padding: 2rem;
+                text-align: center;
+                border-top: 1px solid var(--border-color);
+            }
+            
+            /* 链接样式 */
+            a {
+                color: var(--primary-color);
+                text-decoration: none;
+                transition: color 0.2s ease;
+            }
+            
+            a:hover {
+                color: #ff8c00; /* 稍亮的橙色 */
+            }
+            
+            /* 标题样式 */
+            h1, h2, h3, h4, h5, h6 {
+                color: var(--text-color);
+                margin-bottom: 1rem;
+                font-weight: 600;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+                margin-top: 1rem;
+            }
+            
+            /* 段落样式 */
+            p {
+                margin-bottom: 1rem;
+                color: var(--text-color);
+            }
+            
+            /* 响应式设计 */
+            @media (max-width: 768px) {
+                main {
+                    padding: 1.5rem;
+                    margin-top: 56px; /* 移动端 header 较矮 */
+                }
+                
+                h1 {
+                    font-size: 2rem;
+                }
+            }
+            
+            @media (max-width: 576px) {
+                main {
+                    padding: 1rem;
+                }
+                
+                h1 {
+                    font-size: 1.75rem;
+                }
+            }
+        </style>
     </head>
     <body>
         <Header />
