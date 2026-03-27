@@ -1,0 +1,273 @@
+---
+// ThemeToggle 组件 - 亮暗模式切换开关
+import moon from '../assets/moon.svg';
+import sun from '../assets/sun.svg';
+import { Image } from 'astro:assets';
+---
+
+<!-- 亮/暗模式切换开关 -->
+<div class="theme-toggle">
+  <input 
+    type="checkbox" 
+    id="theme-toggle-checkbox" 
+    class="theme-toggle-checkbox" 
+    aria-label="切换亮/暗模式"
+  />
+  <label for="theme-toggle-checkbox" class="theme-toggle-label">
+    <span style="display:none;">切换亮/暗模式</span>
+    <span class="theme-toggle-track">
+      <span class="theme-toggle-thumb">
+        <!-- 月亮图标（暗模式） -->
+        <Image 
+          src={moon} 
+          alt="暗模式" 
+          width={16}
+          height={16}
+          class="theme-toggle-icon moon-icon" 
+          loading={'eager'}
+        />
+        <!-- 太阳图标（亮模式） -->
+        <Image 
+          src={sun} 
+          alt="亮模式" 
+          width={16}
+          height={16}
+          loading={'eager'}
+          class="theme-toggle-icon sun-icon" 
+        />
+      </span>
+    </span>
+  </label>
+</div>
+
+<style>
+  /* CSS 变量 */
+  :root {
+    --primary-color: #d97319; /* 品牌橙色 */
+    --toggle-width: 60px;
+    --toggle-height: 30px;
+    --thumb-size: 24px;
+    --icon-size: 16px;
+    --hover-expand: 10px; /* 悬停时扩展的宽度 */
+  }
+  
+  :root[data-theme="dark"] {
+    --toggle-track-bg: #003356; /* 与新的暗模式边框颜色一致 */
+    --toggle-thumb-bg: #2a2a2a;
+    --moon-icon-color: #ffffff; /* 月亮图标改为白色 */
+    --toggle-thumb-dark-bg: #fae4d0;
+  }
+  
+  /* 主题切换开关样式 */
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+  }
+  
+  .theme-toggle-checkbox {
+    display: none;
+  }
+  
+  .theme-toggle-label {
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  
+  /* 悬停时滑块变宽效果 - 根据位置决定变宽方向 */
+  .theme-toggle-checkbox:not(:checked) + .theme-toggle-label:hover .theme-toggle-thumb {
+    width: calc(var(--thumb-size) + var(--hover-expand));
+    border-radius: 12px; /* 从圆形变为圆角矩形 */
+    /* 左边时向右变宽 */
+    transform: translateY(-4px); /* 保持弧形路径 */
+  }
+  
+  .theme-toggle-checkbox:checked + .theme-toggle-label:hover .theme-toggle-thumb {
+    width: calc(var(--thumb-size) + var(--hover-expand));
+    border-radius: 12px; /* 从圆形变为圆角矩形 */
+    /* 右边时向左变宽 */
+    transform: translateX(calc(var(--toggle-width) - var(--thumb-size) - var(--hover-expand) - 6px)) translateY(-4px);
+  }
+  
+  .theme-toggle-track {
+    display: block;
+    width: var(--toggle-width);
+    height: var(--toggle-height);
+    background-color: var(--border-color, #eaeaea);
+    border-radius: 15px;
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .theme-toggle-thumb {
+    position: absolute;
+    top: calc(var(--toggle-height)/2 - var(--thumb-size)/2 + 3px);
+    left: 3px;
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    background-color: var(--bg-color, #ffffff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); /* 弹性动画 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+  }
+  
+  /* 向上弯的弧线路径 */
+  .theme-toggle-checkbox:checked + .theme-toggle-label .theme-toggle-thumb {
+    transform: translateX(calc(var(--toggle-width) - var(--thumb-size) - 6px)) translateY(-4px);
+  }
+  
+  .theme-toggle-checkbox:not(:checked) + .theme-toggle-label .theme-toggle-thumb {
+    transform: translateY(-4px);
+  }
+  
+  .theme-toggle-icon {
+    position: absolute;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1;
+  }
+  
+  .moon-icon {
+    left: -22px;
+    filter: brightness(0) invert(1); /* 月亮图标改为白色 */
+    opacity: 0.8;
+  }
+  
+  .sun-icon {
+    right: -22px;
+    opacity: 0.8;
+  }
+  
+  /* 暗模式状态 - 保持拨钮颜色不变 */
+  :root[data-theme="dark"] .theme-toggle-track {
+    background-color: var(--toggle-track-bg);
+  }
+  
+  /* 拨钮颜色保持不变，不使用暗模式变量 */
+  :root[data-theme="dark"] .theme-toggle-thumb {
+    background-color: var(--toggle-thumb-dark-bg, #ffffff);
+  }
+  
+  /* 图标优雅退场效果 */
+  .theme-toggle-checkbox:checked + .theme-toggle-label .moon-icon {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: brightness(0) invert(1); /* 保持白色 */
+  }
+  
+  .theme-toggle-checkbox:checked + .theme-toggle-label .sun-icon {
+    opacity: 0;
+    transform: translateX(8px) scale(0.8); /* 调整退场距离 */
+  }
+  
+  .theme-toggle-checkbox:not(:checked) + .theme-toggle-label .moon-icon {
+    opacity: 0;
+    transform: translateX(-8px) scale(0.8); /* 调整退场距离 */
+    filter: brightness(0) invert(1); /* 保持白色 */
+  }
+  
+  .theme-toggle-checkbox:not(:checked) + .theme-toggle-label .sun-icon {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  
+  /* 悬停效果 */
+  .theme-toggle-label:hover .theme-toggle-track {
+    background-color: var(--hover-color, #f5f5f5);
+  }
+  
+  :root[data-theme="dark"] .theme-toggle-label:hover .theme-toggle-track {
+    background-color: #004267; /* 稍亮的蓝色 */
+  }
+  
+  .theme-toggle-label:hover .theme-toggle-thumb {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* 激活状态颜色 */
+  .theme-toggle-checkbox:checked + .theme-toggle-label .theme-toggle-track {
+    background-color: var(--primary-color);
+  }
+  
+  :root[data-theme="dark"] .theme-toggle-checkbox:checked + .theme-toggle-label .theme-toggle-track {
+    background-color: #944f11;
+  }
+  
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+    :root {
+      --toggle-width: 56px;
+      --toggle-height: 28px;
+      --thumb-size: 22px;
+      --icon-size: 14px;
+      --hover-expand: 8px;
+    }
+    
+    .theme-toggle {
+      height: 36px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    :root {
+      --toggle-width: 52px;
+      --toggle-height: 26px;
+      --thumb-size: 20px;
+      --icon-size: 12px;
+      --hover-expand: 6px;
+    }
+  }
+</style>
+
+<script is:inline>
+  // 暗模式切换功能 - 使用 data-theme 属性
+  (function() {
+    // 获取 HTML 元素
+    const htmlElement = document.documentElement;
+    const themeToggleCheckbox = document.getElementById('theme-toggle-checkbox');
+    
+    // 检查本地存储的暗模式设置
+    const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+    
+    // 初始化状态
+    if (savedDarkMode) {
+      htmlElement.setAttribute('data-theme', 'dark');
+      if (themeToggleCheckbox) {
+        themeToggleCheckbox.checked = true;
+      }
+    } else {
+      htmlElement.setAttribute('data-theme', 'light');
+      if (themeToggleCheckbox) {
+        themeToggleCheckbox.checked = false;
+      }
+    }
+    
+    // 为暗模式切换开关添加事件监听
+    if (themeToggleCheckbox) {
+      themeToggleCheckbox.addEventListener('change', function() {
+        const isDark = this.checked;
+        if (isDark) {
+          htmlElement.setAttribute('data-theme', 'dark');
+        } else {
+          htmlElement.setAttribute('data-theme', 'light');
+        }
+        localStorage.setItem('darkMode', isDark);
+        
+        // 更新 checkbox 的 aria-label
+        this.setAttribute('aria-label', 
+          isDark ? '切换到亮模式' : '切换到暗模式'
+        );
+      });
+    }
+    
+    // 添加一个简单的日志来调试
+    console.log('ThemeToggle initialized. Current theme:', htmlElement.getAttribute('data-theme'));
+  })();
+</script>

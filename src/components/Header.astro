@@ -1,3 +1,358 @@
 ---
-
+// Header 组件
+// 导入图片资源和 Astro Image 组件
+import icon from '../assets/icon.png';
+import user from '../assets/user.svg';
+import github from '../assets/github.svg';
+import share from '../assets/share-2.svg';
+import newsIcon from '../assets/news.svg';
+import blogIcon from '../assets/blog.svg';
+import serviceIcon from '../assets/service.svg';
+import { Image } from 'astro:assets';
+import ThemeToggle from './ThemeToggle.astro';
 ---
+
+<header class="header">
+  <!-- 左侧部分：Logo + 导航 -->
+  <div class="header-left">
+    <!-- 社团 Logo -->
+    <a href="/" class="logo">
+      <Image 
+        src={icon} 
+        alt="BITNP Logo" 
+        width={40}
+        height={40}
+        loading={'eager'}
+        class="logo-image"
+      />
+    </a>
+    
+    <!-- Logo 右侧的较大 margin -->
+    <div class="logo-margin"></div>
+    
+    <!-- 导航菜单 -->
+    <nav class="nav-menu">
+      <a href="/news" class="nav-item">
+        <Image src={newsIcon} alt="新闻" width={20} height={20} class="nav-icon" loading={'eager'} />
+        <span class="nav-text">新闻</span>
+      </a>
+      <a href="/blog" class="nav-item">
+        <Image src={blogIcon} alt="博客" width={20} height={20} class="nav-icon" loading={'eager'} />
+        <span class="nav-text">博客</span>
+      </a>
+      <a href="/services" class="nav-item">
+        <Image src={serviceIcon} alt="服务" width={20} height={20} class="nav-icon" loading={'eager'} />
+        <span class="nav-text">服务</span>
+      </a>
+    </nav>
+  </div>
+  
+  <!-- 右侧部分：功能图标 -->
+  <div class="header-right">
+    <!-- 亮/暗模式切换开关组件 -->
+    <ThemeToggle />
+    
+    <!-- 用户登录模式 -->
+    <button class="icon-button" aria-label="用户登录">
+      <Image 
+        src={user} 
+        alt="用户登录" 
+        width={20}
+        height={20}
+        loading={'eager'}
+        class="icon-image"
+      />
+    </button>
+    
+    <!-- 社团 GitHub 账号 -->
+    <a 
+      href="https://github.com/BITNP" 
+      class="icon-button" 
+      aria-label="GitHub" 
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <Image 
+        src={github} 
+        alt="GitHub" 
+        width={20}
+        height={20}
+        loading={'eager'}
+        class="icon-image"
+      />
+    </a>
+    
+    <!-- 网站分享 -->
+    <button class="icon-button" aria-label="分享网站">
+      <Image 
+        src={share} 
+        alt="分享" 
+        width={20}
+        height={20}
+        loading={'eager'}
+        class="icon-image"
+      />
+    </button>
+  </div>
+</header>
+
+<style>
+  /* 使用全局 CSS 变量，已在 BaseLayout 中定义 */
+  
+  /* Header 样式 */
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    height: 64px;
+    padding: 0 24px;
+    
+    background-color: var(--header-bg, var(--bg-color));
+    color: var(--header-text, var(--text-color));
+    box-shadow: 0 2px 10px var(--shadow-color);
+    border-bottom: 1px solid var(--border-color);
+    
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* 左侧部分 */
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  /* Logo 样式 */
+  .logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+  
+  .logo-image {
+    border-radius: 8px;
+    transition: transform 0.2s ease, filter 0.3s ease;
+  }
+  
+  .logo:hover .logo-image {
+    transform: scale(1.05);
+  }
+  
+  /* 暗模式下 logo 白色自发光效果 - 针对 PNG 不透明部分 */
+  :root[data-theme="dark"] .logo-image {
+    filter: 
+      drop-shadow(0 0 8px rgba(255, 255, 255, 0.6))
+      drop-shadow(0 0 12px rgba(255, 255, 255, 0.4))
+      drop-shadow(0 0 16px rgba(255, 255, 255, 0.2));
+    transition: filter 0.3s ease, transform 0.2s ease;
+  }
+  
+  /* 暗模式下悬停时增强发光效果 */
+  :root[data-theme="dark"] .logo:hover .logo-image {
+    filter: 
+      drop-shadow(0 0 6px rgba(255, 255, 255, 0.8))
+      drop-shadow(0 0 12px rgba(255, 255, 255, 0.6))
+      drop-shadow(0 0 18px rgba(255, 255, 255, 0.4))
+      drop-shadow(0 0 24px rgba(255, 255, 255, 0.2));
+    transform: scale(1.05);
+  }
+  
+  /* Logo 右侧的 margin */
+  .logo-margin {
+    width: 40px;
+    height: 1px;
+  }
+  
+  /* 导航菜单 */
+  .nav-menu {
+    display: flex;
+    gap: 32px;
+  }
+  
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--header-text, var(--text-color));
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 0;
+    position: relative;
+    transition: color 0.2s ease;
+  }
+  
+  /* 图标放大到大过文字 */
+  .nav-icon {
+    width: 25px;
+    height: 25px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease, filter 0.3s ease, transform 0.2s ease;
+  }
+  
+  .nav-text {
+    transition: color 0.2s ease;
+    position: relative; /* 为下划线定位 */
+  }
+  
+  /* 悬停效果：图标变成橙色，文字保持下划线动画 */
+  .nav-item:hover .nav-text {
+    color: var(--primary-color);
+  }
+  
+  .nav-item:hover .nav-icon {
+    filter: brightness(0) saturate(100%) invert(47%) sepia(90%) saturate(500%) hue-rotate(350deg) brightness(90%) contrast(90%);
+    opacity: 1;
+    transform: scale(1.1); /* 悬停时轻微放大 */
+  }
+  
+  /* 文字下划线动画 - 只出现在文字下面 */
+  .nav-text::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; /* 调整到文字下方 */
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+  }
+  
+  .nav-item:hover .nav-text::after {
+    width: 100%;
+  }
+  
+  /* 暗模式下图标颜色处理 */
+  :root[data-theme="dark"] .nav-icon {
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+  }
+  
+  /* 暗模式下悬停时图标变成橙色 */
+  :root[data-theme="dark"] .nav-item:hover .nav-icon {
+    filter: brightness(0) saturate(100%) invert(47%) sepia(90%) saturate(500%) hue-rotate(350deg) brightness(90%) contrast(90%);
+    opacity: 1;
+  }
+  
+  /* 右侧部分 */
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  /* 图标按钮 */
+  .icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--header-text, var(--text-color));
+    
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    padding: 0;
+  }
+  
+  .icon-button:hover {
+    background-color: var(--hover-color);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+  }
+  
+  .icon-button:active {
+    transform: translateY(0);
+  }
+  
+  .icon-image {
+    opacity: 0.8;
+    transition: opacity 0.2s ease, filter 0.3s ease;
+  }
+  
+  .icon-button:hover .icon-image {
+    opacity: 1;
+  }
+  
+  /* 暗模式下图标变为白色 */
+  :root[data-theme="dark"] .icon-image {
+    filter: brightness(0) invert(1);
+  }
+    
+  
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+    .header {
+      padding: 0 16px;
+      height: 56px;
+    }
+    
+    .logo-margin {
+      width: 20px;
+    }
+    
+    .nav-menu {
+      gap: 16px;
+    }
+    
+    .nav-item {
+      font-size: 14px;
+      gap: 6px;
+    }
+    
+    /* 平板端图标大小调整 */
+    .nav-icon {
+      width: 18px;
+      height: 18px;
+    }
+    
+    .header-right {
+      gap: 12px;
+    }
+    
+    .icon-button {
+      width: 36px;
+      height: 36px;
+    }
+    
+    .icon-image {
+      width: 18px;
+      height: 18px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .nav-menu {
+      gap: 12px;
+    }
+    
+    .nav-item {
+      font-size: 13px;
+      gap: 4px;
+    }
+    
+    /* 手机端图标大小调整 */
+    .nav-icon {
+      width: 16px;
+      height: 16px;
+    }
+    
+    .logo-image {
+      width: 32px;
+      height: 32px;
+    }
+  }
+</style>
